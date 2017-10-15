@@ -20,12 +20,11 @@ class RPlugin implements Plugin<Project> {
 
         // Tasks for setting up R project
         target.task('installDeps', type: RScriptInstallTask)
-        target.task('setupCreate', type: RScriptCreateTask, dependsOn: target.tasks.installDeps)
-        target.task('setupTest', type: RScriptSetupTestTask, dependsOn: target.tasks.setupCreate)
-        target.task('setupPackrat', type: RScriptSetupPackratTask, dependsOn: target.tasks.setupTest)
-        target.task('setup', type: SetupGitignoreTask, dependsOn: target.tasks.setupPackrat) { 
+        target.task('setupCreate', type: RScriptSetupTask, dependsOn: target.tasks.installDeps)
+        target.task('setupPackrat', type: RScriptSetupPackratTask, dependsOn: target.tasks.setupCreate)
+        target.task('setup', dependsOn: target.tasks.setupPackrat) { 
             group = "R packaging"
-            description = "Sets up a skeleton R package"
+            description = "Sets up a skeleton R package (warning: non-idempotent task)"
         }
 
         // Task for adding docs

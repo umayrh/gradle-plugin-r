@@ -34,54 +34,69 @@ class RScriptTask extends DefaultTask {
  * TODO: consider an install task per package, connected using GradleBuild task
  */
 class RScriptInstallTask extends RScriptTask {
-    String description = "Installs R packaging dependencies: devtools, roxygen, testthat, packrat"
-    String expression = "if (!require('devtools')) install.packages('devtools', repo='http://cran.rstudio.com'); " +
-                        "if (!require('roxygen')) devtools::install_github('klutometis/roxygen'); " +
-                        "if (!require('testthat')) install.packages('testthat', repo='http://cran.rstudio.com'); " +
-                        "if (!require('packrat')) install.packages('packrat', repo='http://cran.rstudio.com');"
+    String description = "Installs R packaging dependencies: devtools, usethis, roxygen, testthat, packrat"
+    String expression = [
+                        "if (!require('devtools')) install.packages('devtools', repo='http://cran.rstudio.com')",
+                        "if (!require('usethis')) devtools::install_github('r-lib/usethis')",
+                        "if (!require('roxygen')) devtools::install_github('klutometis/roxygen')",
+                        "if (!require('testthat')) install.packages('testthat', repo='http://cran.rstudio.com')",
+                        "if (!require('packrat')) install.packages('packrat', repo='http://cran.rstudio.com')"
+                        ].join("; ")
 }
 
-class RScriptCreateTask extends RScriptTask {
+/*
+ * Setups up R package in the current directory.
+ * It also adds .gitignore and README.md files, and sets up roxygen and testthat
+ * See https://github.com/r-lib/usethis for more options
+ * TODO: make this an idempotent task
+ */
+class RScriptSetupTask extends RScriptTask {
     String description = "Creates a basic R package"
-    String expression = "devtools::create('.')"
+    String pkgName = System.getProperty("user.dir") //new File(".").name
+    String expression = [
+                        "usethis::create_package('${pkgName}')",
+                        "usethis::use_roxygen_md()",
+                        "usethis::use_readme_md()",
+                        "usethis::use_test('todo')",
+                        "usethis::use_git_ignore(c('.Rproj.user','.Rhistory','.RData','packrat/lib*','packrat/src')); "
+                        ].join("; ")
 }
 
-class RScriptSetupTestTask extends RScriptTask {
-    String description = "Sets up testing for R package"
-    String expression = "devtools::use_testthat()"
-}
-
+/*
+ * A task that sets up Packrat for an R package
+ */
 class RScriptSetupPackratTask extends RScriptTask {
     String description = "Sets up package management for R package"
     String expression = "packrat::init('.')"
 }
 
-class SetupGitignoreTask extends DefaultTask {
-    String description = "Creates a .gitignore for R package"
-
-    @TaskAction
-    def exec() {
-        new File(".gitignore").withWriter { out ->
-            out.writeLine(".Rproj.user\n.Rhistory\n.RData\npackrat/lib*/\npackrat/src/")
-        }
-    }
-}
-
+/*
+ * A task that create roxygen documents
+ */
 class RScriptDocumentTask extends RScriptTask {
     String description = "Creates documentation for R package"
     String expression = "devtools::document()"
 }
 
+/*
+ * A task that runs testthat tests
+ */
 class RScriptTestTask extends RScriptTask {
     String description = "Runs test for an R package"
     String expression = "devtools::test()"
 }
 
+/*
+ * A task that retores a package's stated dependencies using Packrat
+ */
 class RScriptPackratRestoreTask extends RScriptTask {
     String description = "Restores packages managed by Packrat for R package"
     String expression = "packrat::restore(overwrite.dirty=TRUE)"
 }
 
+/*
+ * A task that removes all of a package's dependencies
+ */
 class RScriptPackratCleanTask extends Delete {
     String description = "Removes packages (compiled and sources) managed by Packrat for R package"
     Set<Object> delete = [ 'packrat/src', 'packrat/lib', 'packrat/lib-R', 'packrat/lib-ext' ]
