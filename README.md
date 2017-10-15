@@ -19,7 +19,7 @@ R packaging tasks
 document - Creates documentation for R package
 packratClean - Removes packages (compiled and sources) managed by Packrat for R package
 packratRestore - Restores packages managed by Packrat for R package
-setup - Sets up a skeleton R package
+setup - Sets up a skeleton R package (warning: non-idempotent task)
 test - Runs test for an R package
 ```
 
