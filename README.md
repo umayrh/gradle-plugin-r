@@ -59,9 +59,19 @@ plugins {
 
 ## Plugin Development Notes
 
-If you add to or modify the code under `plugin` dirctory, then should can
-recompile and re-package by running (inside `plugin` dir)
+If you add to or modify the code under `plugin` dirctory, then you can
+recompile, re-test, and re-package by running (inside `plugin` dir)
 
 `gradle build uploadArchives`
 
-To test the plugin itself, you can run gradle inside `testRProject` dir.
+To test the plugin itself, you can run gradle inside `testRProject` dir e.g.
+
+`gradle document`
+
+## References
+
+* [Implementing Gradle plugins](https://guides.gradle.org/implementing-gradle-plugins/)
+* [Custom plugins](https://docs.gradle.org/current/userguide/custom_plugins.html)
+* [Custom tasks](https://docs.gradle.org/current/userguide/custom_tasks.html)
+* [Gradle TestKit](https://docs.gradle.org/current/userguide/test_kit.html)
+* [Publish Plugin](https://plugins.gradle.org/docs/publish-plugin)
