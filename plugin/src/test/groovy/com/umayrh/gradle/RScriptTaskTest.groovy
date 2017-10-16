@@ -5,10 +5,7 @@ import org.gradle.testfixtures.ProjectBuilder
 import org.gradle.testkit.runner.BuildResult;
 import org.gradle.testkit.runner.GradleRunner;
 
-import org.junit.Before;
 import org.junit.Rule;
-import org.junit.Test;
-import org.junit.Ignore;
 import org.junit.rules.TemporaryFolder;
 
 import java.io.BufferedWriter;
@@ -17,63 +14,57 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collections;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import static org.gradle.testkit.runner.TaskOutcome.*;
+
+import spock.lang.Ignore
+import spock.lang.Specification
 
 /**
  * Class that tests RScriptTask
  * See also https://docs.gradle.org/current/userguide/test_kit.html
  */
-class RScriptTaskTest {
+class RScriptTaskTest extends Specification {
     @Rule public final TemporaryFolder testProjectDir = new TemporaryFolder();
     private File buildFile;
-    String buildFileHeader = "plugins { id 'com.umayrh.rplugin' }\n\n";
 
-    @Before
-    public void setup() throws IOException {
+    def setup() throws IOException {
         buildFile = testProjectDir.newFile("build.gradle");
+        buildFile << """
+            plugins {
+                id 'com.umayrh.rplugin'
+            }
+        """
     }
 
-    @Test
-    public void canAddTaskToProject() {
+    def "Can successfully add a task of type RScriptTask to a project"() {
         Project project = ProjectBuilder.builder().build()
+
+        when:
         def task = project.task('rScriptTask', type: RScriptTask)
-        assertTrue(task instanceof RScriptTask)
+
+        then:
+        task instanceof RScriptTask
     }
 
     @Ignore("Not ready - somehow fails to find RScriptTask even after loading plugin")
-    public void rScriptTaskExecutesSuccessfully() throws IOException {
-        String buildFileContent = buildFileHeader +
-                                  "project.task ('rScriptTask', type: RScriptTask) {" +
-                                  "    expression = 'version'" +
-                                  "}";
-        writeFile(buildFile, buildFileContent);
+    def "Can successfully execute a task of type RScriptTask"() {
+        buildFile << """
+            project.task ('rScriptTask', type: RScriptTask) {
+                expression = 'version'
+            }
+        """
 
-        BuildResult result = GradleRunner.create()
+        when:
+        def result = GradleRunner.create()
+            .withDebug(true)
             .withProjectDir(testProjectDir.root)
             .withArguments("rScriptTask")
             .withPluginClasspath()
-            .build();
+            .build()
 
-        assertTrue(result.getOutput().contains("platform"));
-        assertEquals(result.task(":rScriptTask").getOutcome(), SUCCESS);
-    }
-
-    /*
-     * Utility method for safely writing a string to file
-     */
-    private void writeFile(File file, String content) throws IOException {
-        BufferedWriter output = null;
-        try {
-            output = new BufferedWriter(new FileWriter(file));
-            output.write(content);
-        } finally {
-            if (output != null) {
-                output.close();
-            }
-        }
+        then:
+        result.getOutput().contains("platform")
+        result.task(":rScriptTask").getOutcome() == SUCCESS
     }
 }
 

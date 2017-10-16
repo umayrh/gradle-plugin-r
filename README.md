@@ -73,5 +73,6 @@ To test the plugin itself, you can run gradle inside `testRProject` dir e.g.
 * [Implementing Gradle plugins](https://guides.gradle.org/implementing-gradle-plugins/)
 * [Custom plugins](https://docs.gradle.org/current/userguide/custom_plugins.html)
 * [Custom tasks](https://docs.gradle.org/current/userguide/custom_tasks.html)
+* [Testing Gradle plugins](https://guides.gradle.org/testing-gradle-plugins/)
 * [Gradle TestKit](https://docs.gradle.org/current/userguide/test_kit.html)
 * [Publish Plugin](https://plugins.gradle.org/docs/publish-plugin)

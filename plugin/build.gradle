@@ -19,10 +19,14 @@ dependencies {
     compile localGroovy()
     testCompile 'junit:junit:4.12'
     testCompile gradleTestKit()
+    testCompile('org.spockframework:spock-core:1.1-groovy-2.4') {
+        exclude group: 'org.codehaus.groovy'
+    }
 }
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 // Upload to a local archive
