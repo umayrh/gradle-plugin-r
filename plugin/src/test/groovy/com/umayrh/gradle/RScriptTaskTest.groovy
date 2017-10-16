@@ -46,10 +46,10 @@ class RScriptTaskTest extends Specification {
         task instanceof RScriptTask
     }
 
-    @Ignore("Not ready - somehow fails to find RScriptTask even after loading plugin")
     def "Can successfully execute a task of type RScriptTask"() {
+        // Custom tasks class names must be fully qualified for detection
         buildFile << """
-            project.task ('rScriptTask', type: RScriptTask) {
+            project.task ('rScriptTask', type: com.umayrh.gradle.RScriptTask) {
                 expression = 'version'
             }
         """
@@ -63,7 +63,7 @@ class RScriptTaskTest extends Specification {
             .build()
 
         then:
-        result.getOutput().contains("platform")
+        result.getOutput().contains("language       R")
         result.task(":rScriptTask").getOutcome() == SUCCESS
     }
 }

@@ -11,3 +11,7 @@ buildscript {
 }
 
 apply plugin: 'rplugin'
+
+project.task ('testRScriptTask', type: com.umayrh.gradle.RScriptTask) {
+    expression = "version"
+}
