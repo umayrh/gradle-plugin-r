@@ -1,6 +1,6 @@
 # gradle-plugin-r
 
-A Gradle plugin for R projects. See also its Github [repo](https://github.com/umayrh/gradle-plugin-r).
+A Gradle plugin for R projects.
 
 This plugin helps create packages that are structured using [devtools](https://github.com/hadley/devtools) and 
 [usethis](https://github.com/r-lib/usethis), documented using [roxygen2](https://github.com/klutometis/roxygen), 
