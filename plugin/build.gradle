@@ -11,21 +11,21 @@ buildscript {
 
 apply plugin: 'groovy'
 apply plugin: 'maven'
+apply plugin: 'java-gradle-plugin'
 apply plugin: "com.gradle.plugin-publish"
 
 dependencies {
     compile gradleApi()
     compile localGroovy()
     testCompile 'junit:junit:4.12'
+    testCompile gradleTestKit()
 }
 
 repositories {
     mavenCentral()
 }
 
-group = 'com.umayrh'
-version = '0.1'
-
+// Upload to a local archive
 uploadArchives {
     repositories {
         mavenDeployer {
@@ -34,6 +34,10 @@ uploadArchives {
     }
 }
 
+group = 'com.umayrh'
+version = '0.2'
+
+// Bundle information for publishing
 pluginBundle {
   website = 'https://umayrh.wordpress.com'
   vcsUrl = 'https://github.com/umayrh/gradle-plugin-r'

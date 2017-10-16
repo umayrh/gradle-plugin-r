@@ -13,7 +13,9 @@ import org.gradle.api.tasks.TaskAction
  *      instead of the vague current dir. Maybe expect settings.gradle?
  */
 class RScriptTask extends DefaultTask {
+    @Input
     String description = "Runs Rscript against given expression"
+
     @Input
     String expression = null
 
@@ -23,6 +25,7 @@ class RScriptTask extends DefaultTask {
             if (expression == null) {
                  throw new GradleException("Must specify an Rscript expression")
             }
+
             // commandLine is part of Exec task
             commandLine 'Rscript', '-e', expression
         }
@@ -34,6 +37,7 @@ class RScriptTask extends DefaultTask {
  * TODO: consider an install task per package, connected using GradleBuild task
  */
 class RScriptInstallTask extends RScriptTask {
+    @Input
     String description = "Installs R packaging dependencies: devtools, usethis, roxygen, testthat, packrat"
     String expression = [
                         "if (!require('devtools')) install.packages('devtools', repo='http://cran.rstudio.com')",
@@ -51,8 +55,10 @@ class RScriptInstallTask extends RScriptTask {
  * TODO: make this an idempotent task
  */
 class RScriptSetupTask extends RScriptTask {
+    @Input
     String description = "Creates a basic R package"
-    String pkgName = System.getProperty("user.dir") //new File(".").name
+    @Input
+    String pkgName = System.getProperty("user.dir")
     String expression = [
                         "usethis::create_package('${pkgName}')",
                         "usethis::use_roxygen_md()",
@@ -66,6 +72,7 @@ class RScriptSetupTask extends RScriptTask {
  * A task that sets up Packrat for an R package
  */
 class RScriptSetupPackratTask extends RScriptTask {
+    @Input
     String description = "Sets up package management for R package"
     String expression = "packrat::init('.')"
 }
@@ -74,6 +81,7 @@ class RScriptSetupPackratTask extends RScriptTask {
  * A task that create roxygen documents
  */
 class RScriptDocumentTask extends RScriptTask {
+    @Input
     String description = "Creates documentation for R package"
     String expression = "devtools::document()"
 }
@@ -82,6 +90,7 @@ class RScriptDocumentTask extends RScriptTask {
  * A task that runs testthat tests
  */
 class RScriptTestTask extends RScriptTask {
+    @Input
     String description = "Runs test for an R package"
     String expression = "devtools::test()"
 }
@@ -90,6 +99,7 @@ class RScriptTestTask extends RScriptTask {
  * A task that retores a package's stated dependencies using Packrat
  */
 class RScriptPackratRestoreTask extends RScriptTask {
+    @Input
     String description = "Restores packages managed by Packrat for R package"
     String expression = "packrat::restore(overwrite.dirty=TRUE)"
 }
@@ -98,6 +108,7 @@ class RScriptPackratRestoreTask extends RScriptTask {
  * A task that removes all of a package's dependencies
  */
 class RScriptPackratCleanTask extends Delete {
+    @Input
     String description = "Removes packages (compiled and sources) managed by Packrat for R package"
     Set<Object> delete = [ 'packrat/src', 'packrat/lib', 'packrat/lib-R', 'packrat/lib-ext' ]
 }

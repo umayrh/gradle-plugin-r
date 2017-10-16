@@ -1,13 +1,14 @@
 # gradle-plugin-r
 
-A Gradle plugin for R projects. 
+A Gradle plugin for R projects. See also its Github [repo](https://github.com/umayrh/gradle-plugin-r).
 
-This plugin helps create packages that are structured using [devtools](https://github.com/hadley/devtools), documented using
-[roxygen2](https://github.com/klutometis/roxygen), with dependencies managed using [Packrat](https://rstudio.github.io/packrat/),
-and unit-tested using [testthat](https://github.com/hadley/testthat).
+This plugin helps create packages that are structured using [devtools](https://github.com/hadley/devtools) and 
+[usethis](https://github.com/r-lib/usethis), documented using [roxygen2](https://github.com/klutometis/roxygen), 
+with dependencies managed using [Packrat](https://rstudio.github.io/packrat/), and unit-tested using 
+[testthat](https://github.com/hadley/testthat).
 
 J. Olson's [R plugin](https://github.com/jamiefolson/gradle-plugin-r) inspired this one. One important difference is the use of Packrat,
-the other that this plugin achieves the same ends with a terser implementation.
+the other is, perhaps, a terser implementation.
 
 ## Overview
 
@@ -33,6 +34,29 @@ This project contains two directories:
 * Create a directory (this will be your R package)
 * Create a build.gradle file, which applies this plugin
 
+```
+buildscript {
+  repositories {
+      maven {
+          url "https://plugins.gradle.org/m2/"
+      }
+  }
+  dependencies {
+      classpath "gradle.plugin.com.umayrh:gradle-plugin-r:0.2"
+  }
+}
+
+apply plugin: "com.umayrh.rplugin"
+```
+
+It should also be possible to use Gradle's new plugin mechanism:
+
+````
+plugins {
+    id "com.umayrh.rplugin" version "0.2"
+}
+````
+
 ## Plugin Development Notes
 
 If you add to or modify the code under `plugin` dirctory, then should can
@@ -40,4 +64,4 @@ recompile and re-package by running (inside `plugin` dir)
 
 `gradle build uploadArchives`
 
-To test the plugin itself, you can run gradle inside `testRProject` dir
+To test the plugin itself, you can run gradle inside `testRProject` dir.
