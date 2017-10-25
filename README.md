@@ -1,5 +1,7 @@
 # gradle-plugin-r
 
+[![Build Status](https://travis-ci.org/umayrh/gradle-plugin-r.svg?branch=master)](https://travis-ci.org/umayrh/gradle-plugin-r)
+
 A Gradle plugin for R projects.
 
 This plugin helps create packages that are structured using [devtools](https://github.com/hadley/devtools) and 
