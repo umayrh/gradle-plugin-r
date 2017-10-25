@@ -1,0 +1,14 @@
+language: groovy
+sudo: false
+
+dist: trusty
+jdk:
+  - oraclejdk8
+  - openjdk7
+
+branches:
+  only:
+    - master
+notifications:
+  email:
+    - umayrh@gmail.com
