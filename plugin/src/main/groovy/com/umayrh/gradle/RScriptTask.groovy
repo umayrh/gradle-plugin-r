@@ -40,11 +40,11 @@ class RScriptInstallTask extends RScriptTask {
     @Input
     String description = "Installs R packaging dependencies: devtools, usethis, roxygen, testthat, packrat"
     String expression = [
-                        "if (!require('devtools')) install.packages('devtools', repo='http://cran.rstudio.com')",
-                        "if (!require('usethis')) devtools::install_github('r-lib/usethis')",
-                        "if (!require('roxygen')) devtools::install_github('klutometis/roxygen')",
-                        "if (!require('testthat')) install.packages('testthat', repo='http://cran.rstudio.com')",
-                        "if (!require('packrat')) install.packages('packrat', repo='http://cran.rstudio.com')"
+                        "if (!'devtools' %in% installed.packages()) install.packages('devtools', repo='http://cran.rstudio.com')",
+                        "if (!'usethis' %in% installed.packages()) devtools::install_github('r-lib/usethis')",
+                        "if (!'roxygen' %in% installed.packages()) devtools::install_github('klutometis/roxygen')",
+                        "if (!'testthat' %in% installed.packages()) install.packages('testthat', repo='http://cran.rstudio.com')",
+                        "if (!'packrat' %in% installed.packages()) install.packages('packrat', repo='http://cran.rstudio.com')"
                         ].join("; ")
 }
 

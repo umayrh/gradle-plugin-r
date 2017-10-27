@@ -28,7 +28,7 @@ class RPlugin implements Plugin<Project> {
         }
 
         // Task for adding docs
-        target.task('document', type: RScriptDocumentTask) { group = "R packaging" }
+        target.task('document', type: RScriptDocumentTask, dependsOn: target.tasks.installDeps) { group = "R packaging" }
 
         // Task for running tests
         target.task('test', type: RScriptTestTask, dependsOn: target.tasks.document) { group = "R packaging" }
