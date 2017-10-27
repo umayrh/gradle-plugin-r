@@ -44,7 +44,7 @@ buildscript {
       }
   }
   dependencies {
-      classpath "gradle.plugin.com.umayrh:gradle-plugin-r:0.2"
+      classpath "gradle.plugin.com.umayrh:gradle-plugin-r:0.2.1"
   }
 }
 
