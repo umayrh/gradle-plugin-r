@@ -66,5 +66,31 @@ class RScriptTaskTest extends Specification {
         result.getOutput().contains("language       R")
         result.task(":rScriptTask").getOutcome() == SUCCESS
     }
+
+    def "Can successfully execute RScriptPackratCleanTask"() {
+        buildFile << """
+            project.task ('rScriptCleanTask', type: com.umayrh.gradle.RScriptPackratCleanTask) {
+            }
+        """
+
+        String packratBaseDir = "packrat"
+        def packratDirs = [ "lib", "lib-R", "lib-ext", "src" ]
+        def packratFiles = []
+
+        packratDirs.each {
+            packratFiles.add(testProjectDir.newFolder(packratBaseDir, "${it}"))
+        }
+
+        when:
+        def result = GradleRunner.create()
+            .withDebug(true)
+            .withProjectDir(testProjectDir.root)
+            .withArguments("rScriptCleanTask")
+            .withPluginClasspath()
+            .build()
+
+        then:
+        result.task(":rScriptCleanTask").getOutcome() == SUCCESS
+    }
 }
 

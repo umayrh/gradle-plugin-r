@@ -27,17 +27,17 @@ class RPlugin implements Plugin<Project> {
             description = "Sets up a skeleton R package (warning: non-idempotent task)"
         }
 
-        // Task for adding docs
-        target.task('document', type: RScriptDocumentTask, dependsOn: target.tasks.installDeps) { group = "R packaging" }
-
-        // Task for running tests
-        target.task('test', type: RScriptTestTask, dependsOn: target.tasks.document) { group = "R packaging" }
-
         // Task for restoring packages managed by Packrat
-        target.task('packratRestore', type: RScriptPackratRestoreTask) { group = "R packaging" }
+        target.task('packratRestore', type: RScriptPackratRestoreTask, dependsOn: target.tasks.installDeps) { group = "R packaging" }
 
         // Task for cleaning packages (compiled and source) managed by Packrat
         target.task('packratClean', type: RScriptPackratCleanTask) { group = "R packaging" }
+
+        // Task for adding docs
+        target.task('document', type: RScriptDocumentTask, dependsOn: target.tasks.packratRestore) { group = "R packaging" }
+
+        // Task for running tests
+        target.task('test', type: RScriptTestTask, dependsOn: target.tasks.document) { group = "R packaging" }
 
         // TODO: add packaging task
     }

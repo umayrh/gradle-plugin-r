@@ -6,11 +6,11 @@ buildscript {
     }
     dependencies {
         classpath group: 'com.umayrh', name: 'gradle-plugin-r',
-				  version: '0.1'
+				  version: '0.2.2'
     }
 }
 
-apply plugin: 'rplugin'
+apply plugin: 'com.umayrh.rplugin'
 
 project.task ('testRScriptTask', type: com.umayrh.gradle.RScriptTask) {
     expression = "version"

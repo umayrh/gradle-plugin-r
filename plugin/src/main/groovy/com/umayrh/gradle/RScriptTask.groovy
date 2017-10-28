@@ -25,7 +25,6 @@ class RScriptTask extends DefaultTask {
             if (expression == null) {
                  throw new GradleException("Must specify an Rscript expression")
             }
-
             // commandLine is part of Exec task
             commandLine 'Rscript', '-e', expression
         }
@@ -110,5 +109,10 @@ class RScriptPackratRestoreTask extends RScriptTask {
 class RScriptPackratCleanTask extends Delete {
     @Input
     String description = "Removes packages (compiled and sources) managed by Packrat for R package"
-    Set<Object> delete = [ 'packrat/src', 'packrat/lib', 'packrat/lib-R', 'packrat/lib-ext' ]
+    Set<Object> delete = ["packrat/src", "packrat/lib", "packrat/lib-R", "packrat/lib-ext"]
+
+    @TaskAction
+    def exec() {
+        project.delete(delete)
+    }
 }
