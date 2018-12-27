@@ -39,7 +39,7 @@ uploadArchives {
 }
 
 group = 'com.umayrh'
-version = '0.2.3'
+version = '0.2.4'
 
 // Bundle information for publishing
 pluginBundle {
@@ -55,4 +55,3 @@ pluginBundle {
     }
   }
 }
-
