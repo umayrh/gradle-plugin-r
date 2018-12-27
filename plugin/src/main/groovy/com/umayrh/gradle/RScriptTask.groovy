@@ -39,6 +39,7 @@ class RScriptInstallTask extends RScriptTask {
     @Input
     String description = "Installs R packaging dependencies: devtools, usethis, roxygen, testthat, packrat"
     String expression = [
+                        "if (!'git2r' %in% installed.packages()) install.packages('git2r', repo='http://cran.rstudio.com')",
                         "if (!'devtools' %in% installed.packages()) install.packages('devtools', repo='http://cran.rstudio.com')",
                         "if (!'usethis' %in% installed.packages()) devtools::install_github('r-lib/usethis')",
                         "if (!'roxygen' %in% installed.packages()) devtools::install_github('klutometis/roxygen')",
