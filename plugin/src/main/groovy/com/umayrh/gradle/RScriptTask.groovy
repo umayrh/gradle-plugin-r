@@ -1,6 +1,5 @@
 package com.umayrh.gradle
 
-import org.gradle.api.tasks.Exec
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.tasks.Delete
@@ -41,8 +40,8 @@ class RScriptInstallTask extends RScriptTask {
     String expression = [
                         "if (!'git2r' %in% installed.packages()) install.packages('git2r', repo='http://cran.rstudio.com')",
                         "if (!'devtools' %in% installed.packages()) install.packages('devtools', repo='http://cran.rstudio.com')",
-                        "if (!'usethis' %in% installed.packages()) devtools::install_github('r-lib/usethis')",
-                        "if (!'roxygen' %in% installed.packages()) devtools::install_github('klutometis/roxygen')",
+                        "if (!'usethis' %in% installed.packages()) install.packages('usethis', repo='http://cran.rstudio.com')",
+                        "if (!'roxygen' %in% installed.packages()) install.packages('roxygen2', repo='http://cran.rstudio.com')",
                         "if (!'testthat' %in% installed.packages()) install.packages('testthat', repo='http://cran.rstudio.com')",
                         "if (!'packrat' %in% installed.packages()) install.packages('packrat', repo='http://cran.rstudio.com')"
                         ].join("; ")

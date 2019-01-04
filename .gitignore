@@ -4,3 +4,6 @@ repo
 plugin/.gradle/*
 plugin/build
 testRProject/.gradle/*
+derby.log
+metastore_db
+.idea
