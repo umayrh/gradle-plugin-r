@@ -2,21 +2,14 @@ package com.umayrh.gradle
 
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
-import org.gradle.testkit.runner.BuildResult;
-import org.gradle.testkit.runner.GradleRunner;
-
+import org.gradle.testkit.runner.GradleRunner
+import org.junit.Before;
 import org.junit.Rule;
-import org.junit.rules.TemporaryFolder;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Collections;
+import org.junit.rules.TemporaryFolder
+import spock.lang.Shared;
 
 import static org.gradle.testkit.runner.TaskOutcome.*;
 
-import spock.lang.Ignore
 import spock.lang.Specification
 
 /**
@@ -24,10 +17,11 @@ import spock.lang.Specification
  * See also https://docs.gradle.org/current/userguide/test_kit.html
  */
 class RScriptTaskTest extends Specification {
-    @Rule public final TemporaryFolder testProjectDir = new TemporaryFolder();
-    private File buildFile;
+    @Rule TemporaryFolder testProjectDir = new TemporaryFolder();
+    File buildFile;
 
-    def setup() throws IOException {
+    @Before
+    def beforeMethod() throws Exception {
         buildFile = testProjectDir.newFile("build.gradle");
         buildFile << """
             plugins {
