@@ -1,6 +1,6 @@
 build
 repo
-.gradle/*
+**/.gradle
 plugin/.gradle/*
 plugin/build
 testRProject/.gradle/*

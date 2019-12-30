@@ -86,5 +86,31 @@ class RScriptTaskTest extends Specification {
         then:
         result.task(":rScriptCleanTask").getOutcome() == SUCCESS
     }
+
+    def "Can successfully execute RScriptRenvCleanTask"() {
+        buildFile << """
+            project.task ('rScriptCleanTask', type: com.umayrh.gradle.RScriptRenvCleanTask) {
+            }
+        """
+
+        String renvBaseDir = "renv"
+        def renvDirs = [ "library"]
+        def renvFiles = []
+
+        renvDirs.each {
+            renvFiles.add(testProjectDir.newFolder(renvBaseDir, "${it}"))
+        }
+
+        when:
+        def result = GradleRunner.create()
+                .withDebug(true)
+                .withProjectDir(testProjectDir.root)
+                .withArguments("rScriptCleanTask")
+                .withPluginClasspath()
+                .build()
+
+        then:
+        result.task(":rScriptCleanTask").getOutcome() == SUCCESS
+    }
 }
 

@@ -39,11 +39,11 @@ uploadArchives {
 }
 
 group = 'com.umayrh'
-version = '0.2.6'
+version = '0.3.0'
 
 // Bundle information for publishing
 pluginBundle {
-  website = 'https://umayrh.wordpress.com'
+  website = 'https://umayrh.github.io'
   vcsUrl = 'https://github.com/umayrh/gradle-plugin-r'
   description = 'Plugin for R development'
   tags = ['R', 'development']

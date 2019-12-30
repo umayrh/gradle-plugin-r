@@ -43,7 +43,8 @@ class RScriptInstallTask extends RScriptTask {
                         "if (!'usethis' %in% installed.packages()) install.packages('usethis', repo='http://cran.rstudio.com')",
                         "if (!'roxygen' %in% installed.packages()) install.packages('roxygen2', repo='http://cran.rstudio.com')",
                         "if (!'testthat' %in% installed.packages()) install.packages('testthat', repo='http://cran.rstudio.com')",
-                        "if (!'packrat' %in% installed.packages()) install.packages('packrat', repo='http://cran.rstudio.com')"
+                        "if (!'packrat' %in% installed.packages()) install.packages('packrat', repo='http://cran.rstudio.com')",
+                        "if (!'renv' %in% installed.packages()) install.packages('renv', repo='http://cran.rstudio.com')"
                         ].join("; ")
 }
 
@@ -63,7 +64,7 @@ class RScriptSetupTask extends RScriptTask {
                         "usethis::use_roxygen_md()",
                         "usethis::use_readme_md()",
                         "usethis::use_test('todo')",
-                        "usethis::use_git_ignore(c('.Rproj.user','.Rhistory','.RData','packrat/lib*','packrat/src')); "
+                        "usethis::use_git_ignore(c('.Rproj.user','.Rhistory','.RData','packrat/lib*','packrat/src','renv/library')); "
                         ].join("; ")
 }
 
@@ -72,8 +73,17 @@ class RScriptSetupTask extends RScriptTask {
  */
 class RScriptSetupPackratTask extends RScriptTask {
     @Input
-    String description = "Sets up package management for R package"
+    String description = "Sets up packrat-based package management for R package"
     String expression = "packrat::init('.')"
+}
+
+/*
+ * A task that sets up Renv for an R package
+ */
+class RScriptSetupRenvTask extends RScriptTask {
+    @Input
+    String description = "Sets up Renv-based package management for R package"
+    String expression = "renv::init(bare = TRUE)"
 }
 
 /*
@@ -95,7 +105,26 @@ class RScriptTestTask extends RScriptTask {
 }
 
 /*
- * A task that retores a package's stated dependencies using Packrat
+ * A task that runs devtools package check
+ */
+class RScriptCheckTask extends RScriptTask {
+    @Input
+    String description = "Runs checks for an R package"
+    String expression = "devtools::check()"
+}
+
+/*
+ * A task that builds an R package into a tarball
+ */
+class RScriptBuildTask extends RScriptTask {
+    @Input
+    String description = "Builds an R package into a tarball"
+    String expression = "devtools::build()"
+}
+
+
+/*
+ * A task that restores a package's stated dependencies using Packrat
  */
 class RScriptPackratRestoreTask extends RScriptTask {
     @Input
@@ -104,12 +133,35 @@ class RScriptPackratRestoreTask extends RScriptTask {
 }
 
 /*
- * A task that removes all of a package's dependencies
+ * A task that restores a package's stated dependencies using Renv
+ */
+class RScriptRenvRestoreTask extends RScriptTask {
+    @Input
+    String description = "Restores packages managed by Renv for R package"
+    String expression = "renv::restore()"
+}
+
+/*
+ * A task that removes all of a package's Packrat dependencies
  */
 class RScriptPackratCleanTask extends Delete {
     @Input
-    String description = "Removes packages (compiled and sources) managed by Packrat for R package"
+    String description = "Removes packages (compiled and sources) managed by Packrat for an R package"
     Set<Object> delete = ["packrat/src", "packrat/lib", "packrat/lib-R", "packrat/lib-ext"]
+
+    @TaskAction
+    def exec() {
+        project.delete(delete)
+    }
+}
+
+/*
+ * A task that removes all of a package's Renv dependencies
+ */
+class RScriptRenvCleanTask extends Delete {
+    @Input
+    String description = "Removes packages (compiled and sources) managed by Renv for an R package"
+    Set<Object> delete = ["renv/library"]
 
     @TaskAction
     def exec() {

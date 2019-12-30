@@ -19,26 +19,79 @@ class RPlugin implements Plugin<Project> {
          */
 
         // Tasks for setting up R project
-        target.task('installDeps', type: RScriptInstallTask)
-        target.task('setupCreate', type: RScriptSetupTask, dependsOn: target.tasks.installDeps)
-        target.task('setupPackrat', type: RScriptSetupPackratTask, dependsOn: target.tasks.setupCreate)
-        target.task('setup', dependsOn: target.tasks.setupPackrat) { 
-            group = "R packaging"
-            description = "Sets up a skeleton R package (warning: non-idempotent task)"
+        target.task('installDeps', type: RScriptInstallTask)  {
+            group = "R setup, build and packaging"
+            description = "Installs common packaging dependencies"
+        }
+
+        target.task('setupCreate', type: RScriptSetupTask, dependsOn: target.tasks.installDeps)  {
+            group = "R setup, build and packaging"
+            description = "Ensures that pre-conditions for package setup are satisfied."
+        }
+
+        target.task('setupPackrat', type: RScriptSetupPackratTask, dependsOn: target.tasks.setupCreate)  {
+            group = "R setup, build and packaging"
+            description = "Sets up a skeleton R package using Renv (warning: non-idempotent task)."
+        }
+
+        target.task('setupRenv', type: RScriptSetupRenvTask, dependsOn: target.tasks.setupCreate)  {
+            group = "R setup, build and packaging"
+            description = "Sets up a skeleton R package using Renv (warning: non-idempotent task)"
+        }
+
+        target.task('setup', dependsOn: target.tasks.setupRenv) {
+            group = "R setup, build and packaging"
+            description = "Sets up a skeleton R package (warning: non-idempotent task)."
         }
 
         // Task for restoring packages managed by Packrat
-        target.task('packratRestore', type: RScriptPackratRestoreTask, dependsOn: target.tasks.installDeps) { group = "R packaging" }
+        target.task('packratRestore', type: RScriptPackratRestoreTask, dependsOn: target.tasks.installDeps) {
+            group = "R setup, build and packaging"
+        }
+
+        // Task for restoring packages managed by Renv
+        target.task('renvRestore', type: RScriptRenvRestoreTask, dependsOn: target.tasks.installDeps) {
+            group = "R setup, build and packaging"
+        }
+
+        target.task('restore', dependsOn: target.tasks.renvRestore) {
+            group = "R setup, build and packaging"
+            description = "Restores all dependencies for a package."
+        }
 
         // Task for cleaning packages (compiled and source) managed by Packrat
-        target.task('packratClean', type: RScriptPackratCleanTask) { group = "R packaging" }
+        target.task('packratClean', type: RScriptPackratCleanTask)  {
+            group = "R setup, build and packaging"
+        }
+
+        // Task for cleaning packages (compiled and source) managed by Renv
+        target.task('renvClean', type: RScriptRenvCleanTask)  {
+            group = "R setup, build and packaging"
+        }
+
+        // Task for cleaning packages
+        target.task('packageClean', dependsOn: target.tasks.renvClean)  {
+            group = "R setup, build and packaging"
+        }
 
         // Task for adding docs
-        target.task('document', type: RScriptDocumentTask, dependsOn: target.tasks.packratRestore) { group = "R packaging" }
+        target.task('document', type: RScriptDocumentTask, dependsOn: target.tasks.renvRestore)  {
+            group = "R setup, build and packaging"
+        }
 
         // Task for running tests
-        target.task('test', type: RScriptTestTask, dependsOn: target.tasks.document) { group = "R packaging" }
+        target.task('test', type: RScriptTestTask, dependsOn: target.tasks.document)  {
+            group = "R setup, build and packaging"
+        }
 
-        // TODO: add packaging task
+        // Task for check package
+        target.task('packageCheck', type: RScriptCheckTask, dependsOn: target.tasks.restore)  {
+            group = "R setup, build and packaging"
+        }
+
+        // Task for running tests
+        target.task('packageBuild', type: RScriptBuildTask, dependsOn: target.tasks.test)  {
+            group = "R setup, build and packaging"
+        }
     }
 }

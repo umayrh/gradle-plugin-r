@@ -6,8 +6,8 @@ A Gradle plugin for R projects.
 
 This plugin helps create packages that are structured using [devtools](https://github.com/hadley/devtools) and 
 [usethis](https://github.com/r-lib/usethis), documented using [roxygen2](https://github.com/klutometis/roxygen), 
-with dependencies managed using [Packrat](https://rstudio.github.io/packrat/), and unit-tested using 
-[testthat](https://github.com/hadley/testthat).
+with dependencies managed using [Renv](https://rstudio.github.io/renv/) (or optionally [Packrat](https://rstudio.github.io/packrat/)), 
+and unit-tested using [testthat](https://github.com/hadley/testthat).
 
 J. Olson's [R plugin](https://github.com/jamiefolson/gradle-plugin-r) inspired this one. One important difference is the use of Packrat,
 the other is, perhaps, a terser implementation.
@@ -17,12 +17,22 @@ the other is, perhaps, a terser implementation.
 The development workflows for R project are (`gradle tasks`):
 
 ```
-R packaging tasks
------------------
+R setup, build and packaging tasks
+----------------------------------
 document - Creates documentation for R package
-packratClean - Removes packages (compiled and sources) managed by Packrat for R package
+installDeps - Installs common packaging dependencies
+packageBuild - Builds an R package into a tarball
+packageCheck - Runs checks for an R package
+packageClean
+packratClean - Removes packages (compiled and sources) managed by Packrat for an R package
 packratRestore - Restores packages managed by Packrat for R package
-setup - Sets up a skeleton R package (warning: non-idempotent task)
+renvClean - Removes packages (compiled and sources) managed by Renv for an R package
+renvRestore - Restores packages managed by Renv for R package
+restore - Restores all dependencies for a package.
+setup - Sets up a skeleton R package (warning: non-idempotent task).
+setupCreate - Ensures that pre-conditions for package setup are satisfied.
+setupPackrat - Sets up a skeleton R package using Renv (warning: non-idempotent task).
+setupRenv - Sets up a skeleton R package using Renv (warning: non-idempotent task)
 test - Runs test for an R package
 ```
 
@@ -44,7 +54,7 @@ buildscript {
       }
   }
   dependencies {
-      classpath "gradle.plugin.com.umayrh:gradle-plugin-r:0.2.1"
+      classpath "gradle.plugin.com.umayrh:gradle-plugin-r:0.3.0"
   }
 }
 
@@ -55,13 +65,13 @@ It should also be possible to use Gradle's new plugin mechanism:
 
 ````
 plugins {
-    id "com.umayrh.rplugin" version "0.2"
+    id "com.umayrh.rplugin" version "0.3.0"
 }
 ````
 
 ## Plugin Development Notes
 
-If you add to or modify the code under `plugin` dirctory, then you can
+If you add to or modify the code under `plugin` directory, then you can
 recompile, re-test, and re-package by running (inside `plugin` dir)
 
 `gradle build uploadArchives`

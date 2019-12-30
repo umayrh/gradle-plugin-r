@@ -5,8 +5,8 @@ buildscript {
         }
     }
     dependencies {
-        classpath group: 'com.umayrh', name: 'gradle-plugin-r',
-				  version: '0.2.5'
+        classpath group: 'com.umayrh', name: 'plugin',
+				  version: '0.3.0'
     }
 }
 
