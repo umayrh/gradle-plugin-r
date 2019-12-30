@@ -41,7 +41,7 @@ class RScriptInstallTask extends RScriptTask {
                         "if (!'git2r' %in% installed.packages()) install.packages('git2r', repo='http://cran.rstudio.com')",
                         "if (!'devtools' %in% installed.packages()) install.packages('devtools', repo='http://cran.rstudio.com')",
                         "if (!'usethis' %in% installed.packages()) install.packages('usethis', repo='http://cran.rstudio.com')",
-                        "if (!'roxygen' %in% installed.packages()) install.packages('roxygen2', repo='http://cran.rstudio.com')",
+                        "if (!'roxygen2' %in% installed.packages()) install.packages('roxygen2', repo='http://cran.rstudio.com')",
                         "if (!'testthat' %in% installed.packages()) install.packages('testthat', repo='http://cran.rstudio.com')",
                         "if (!'packrat' %in% installed.packages()) install.packages('packrat', repo='http://cran.rstudio.com')",
                         "if (!'renv' %in% installed.packages()) install.packages('renv', repo='http://cran.rstudio.com')"

@@ -54,7 +54,7 @@ buildscript {
       }
   }
   dependencies {
-      classpath "gradle.plugin.com.umayrh:gradle-plugin-r:0.3.0"
+      classpath "gradle.plugin.com.umayrh:gradle-plugin-r:0.3.1"
   }
 }
 
@@ -65,7 +65,7 @@ It should also be possible to use Gradle's new plugin mechanism:
 
 ````
 plugins {
-    id "com.umayrh.rplugin" version "0.3.0"
+    id "com.umayrh.rplugin" version "0.3.1"
 }
 ````
 
