@@ -17,6 +17,7 @@ class RScriptTask extends DefaultTask {
 
     @Input
     String expression = null
+    
 
     @TaskAction
     def exec() {
@@ -24,8 +25,14 @@ class RScriptTask extends DefaultTask {
             if (expression == null) {
                  throw new GradleException("Must specify an Rscript expression")
             }
+            def env = System.getenv()['R_HOME']
+            if (env == null) {
+                // commandLine is part of Exec task
+                commandLine 'Rscript', '-e', expression
+            }else{
             // commandLine is part of Exec task
-            commandLine 'Rscript', '-e', expression
+                commandLine env +'/bin/Rscript', '-e', expression
+            }
         }
     }
 }
